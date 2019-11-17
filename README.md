@@ -7,3 +7,6 @@ CRM Project based on Microservices Architecture
 3) Запускаем микросервис и открываем его по пути localhost:8011/{microservice_name}
 Список активных микросервисов и их microservice_name можно посмотреть по localhost:8010 (Eureka Discovery Service)
 Первые два пункта обязательны!
+
+# API
+1) Чтобы получить список сервисов: localhost:8011/customers-ws/status/services
