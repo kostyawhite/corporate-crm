@@ -8,7 +8,7 @@ import com.vaadin.flow.router.Route;
 import org.springframework.security.access.annotation.Secured;
 
 @Route(value = MainView.ROUTE)
-@Secured("ROLE_USER")
+//@Secured("ROLE_USER")
 public class MainView extends VerticalLayout {
     public static final String ROUTE = "";
 
