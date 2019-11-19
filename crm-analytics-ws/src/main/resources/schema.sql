@@ -1,0 +1,7 @@
+--CREATE TABLE tasks(
+--   id             INTEGER NOT NULL,
+--   template_id    INTEGER NOT NULL,
+--   title          VARCHAR(32) NOT NULL,
+--   description    VARCHAR(64) NOT NULL,
+--   text           TEXT NOT NULL
+--);
