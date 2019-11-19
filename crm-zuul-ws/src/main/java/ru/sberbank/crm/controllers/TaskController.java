@@ -2,13 +2,11 @@ package ru.sberbank.crm.controllers;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import ru.sberbank.crm.models.TaskModel;
 import ru.sberbank.crm.repositories.TaskRepository;
 import ru.sberbank.crm.services.TaskService;
-import ru.sberbank.crm.services.impl.TaskServiceImpl;
 import ru.sberbank.crm.shared.TaskDto;
 
 import java.util.List;
