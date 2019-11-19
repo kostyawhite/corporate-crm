@@ -7,6 +7,8 @@ import java.io.Serializable;
 @Table(name = "templates")
 public class TemplateModel implements Serializable {
 
+    private static final long serialVersionUID = 6620368094088902280L;
+    
     @Id
     @GeneratedValue
     @Column(name = "id")
