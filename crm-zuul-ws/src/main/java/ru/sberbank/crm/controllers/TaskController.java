@@ -27,7 +27,7 @@ public class TaskController {
         return taskRepository.findAll();
     }
 
-    @RequestMapping(path = "/tasks/new", method = RequestMethod.POST,
+    @RequestMapping(path = "/tasks", method = RequestMethod.POST,
             consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE },
             produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE }
     )
