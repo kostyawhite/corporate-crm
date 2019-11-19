@@ -1,9 +1,9 @@
 package ru.sberbank.crm.services;
 
-import ru.sberbank.crm.models.TaskModel;
+import ru.sberbank.crm.shared.TaskDto;
 
 public interface TaskService {
 
-    TaskModel createTask();
+    TaskDto createTask(TaskDto task);
 
 }
