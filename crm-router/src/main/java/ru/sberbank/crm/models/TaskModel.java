@@ -9,7 +9,7 @@ public class TaskModel {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "template_id")
     private Integer template_id;
@@ -23,11 +23,11 @@ public class TaskModel {
     @Column(name = "file")
     private String file;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

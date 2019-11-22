@@ -12,35 +12,35 @@ public class TemplateModel implements Serializable {
     @Id
     @GeneratedValue
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "department_id")
-    private Integer department_id;
+    private Long department_id;
 
     @Column(name = "next_department_id")
-    private Integer next_department_id;
+    private Long next_department_id;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public Integer getDepartment_id() {
+    public Long getDepartment_id() {
         return department_id;
     }
 
-    public void setDepartment_id(Integer department_id) {
+    public void setDepartment_id(Long department_id) {
         this.department_id = department_id;
     }
 
-    public Integer getNext_department_id() {
+    public Long getNext_department_id() {
         return next_department_id;
     }
 
-    public void setNext_department_id(Integer next_department_id) {
+    public void setNext_department_id(Long next_department_id) {
         this.next_department_id = next_department_id;
     }
 

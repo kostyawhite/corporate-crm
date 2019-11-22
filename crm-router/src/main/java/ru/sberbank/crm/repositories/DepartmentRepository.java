@@ -1,13 +1,13 @@
 package ru.sberbank.crm.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import ru.sberbank.crm.models.DepartmentModel;
+import ru.sberbank.crm.models.Department;
 
 import java.util.List;
 
-public interface DepartmentRepository extends JpaRepository<DepartmentModel, Integer> {
+public interface DepartmentRepository extends JpaRepository<Department, Integer> {
 
-    List<DepartmentModel> findAll();
-    DepartmentModel findDepartmentById(Integer id);
+    List<Department> findAll();
+    Department findDepartmentById(Integer id);
 
 }
