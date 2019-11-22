@@ -29,11 +29,3 @@ build/
 
 ### VS Code ###
 .vscode/
-
-package.json
-package-lock.json
-webpack.config.js
-webpack.generated.js
-
-config/
-node_modules/
