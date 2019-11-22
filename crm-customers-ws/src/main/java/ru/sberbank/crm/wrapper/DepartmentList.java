@@ -16,4 +16,12 @@ public class DepartmentList {
     public DepartmentList() {
         departmentsList = new ArrayList<>();
     }
+
+    public List<Department> getDepartmentsList() {
+        return departmentsList;
+    }
+
+    public void setDepartmentsList(List<Department> departmentsList) {
+        this.departmentsList = departmentsList;
+    }
 }

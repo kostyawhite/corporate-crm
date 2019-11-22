@@ -1,6 +1,10 @@
 package ru.sberbank.crm.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.sberbank.crm.entity.Department;
@@ -13,57 +17,44 @@ import java.util.List;
 @Service
 public class CommunicationService {
     // TODO update root
-    private final String routerRootUrl = "http:/routerIP:routerPort";
+//    private final String routerRootUrl = "http:/routerIP:routerPort";
+    private final String routerRootUrl = "http://192.168.100.5:8763";
 
     @Autowired
     private RestTemplate restTemplate;
 
     public List<Template> getTemplatesFromRouter() {
         // TODO update path
-        /*
-        String routerRequestUrl = String.format("%s/path", routerRootUrl);
 
-        TemplateList response = restTemplate.getForObject(
+        String routerRequestUrl = String.format("%s/templates/descriptions", routerRootUrl);
+
+        ResponseEntity<Object[]> response = restTemplate .getForEntity(
                 routerRequestUrl,
-                TemplateList.class);
+                Object[].class
+        );
 
-        if (response != null) {
-            return response.getTemplatesList();
-        } else {
-            return Collections.emptyList();
-        }
-        */
+        Object[] objects = response.getBody();
 
-        List<Template> templates = new ArrayList<>();
-        Template template = new Template();
-        template.setId(1L);
-        template.setDescription("Шаблон 1");
-        templates.add(template);
+        ObjectMapper mapper = new ObjectMapper();
+        List<Template> templates = mapper.convertValue(objects, new TypeReference<List<Template>>() {});
+
         return templates;
     }
 
-    public List<Department> getDepartmentsFromRouter(Long selfDepartmentId) {
+    public List<Department> getDepartmentsFromRouter() {
         // TODO update path
-        /*
-        String routerRequestUrl = String.format("%s/path/%d", routerRootUrl, selfDepartmentId);
 
-        DepartmentList response = restTemplate.getForObject(
+        String routerRequestUrl = String.format("%s/departments", routerRootUrl);
+
+        ResponseEntity<Object[]> response = restTemplate .getForEntity(
                 routerRequestUrl,
-                DepartmentList.class);
+                Object[].class
+        );
 
-        if (response != null) {
-            return response.getDepartmentList();
-        } else {
-            return Collections.emptyList();
-        }
-        */
+        Object[] objects = response.getBody();
 
-        List<Department> departments = new ArrayList<>();
-        Department department1 = new Department();
-        department1.setId(1L);
-        department1.setName("ws-department");
-        department1.setDescription("Отдел 1");
-        departments.add(department1);
+        ObjectMapper mapper = new ObjectMapper();
+        List<Department> departments = mapper.convertValue(objects, new TypeReference<List<Department>>() {});
 
         return departments;
     }

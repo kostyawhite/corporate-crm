@@ -123,7 +123,7 @@ public class MainView extends VerticalLayout {
     private VerticalLayout getTaskLayout(Task task) {
         Binder<Department> taskDepartmentsBinder = new Binder<>();
         Map<String, String> departments = new HashMap<>();
-        for (Department department : communicationService.getDepartmentsFromRouter(selfDepartmentId)) {
+        for (Department department : communicationService.getDepartmentsFromRouter()) {
             departments.put(department.getDescription(), department.getName());
         }
 

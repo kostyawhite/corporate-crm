@@ -16,4 +16,12 @@ public class TemplateList {
     public TemplateList() {
         templatesList = new ArrayList<>();
     }
+
+    public List<Template> getTemplatesList() {
+        return templatesList;
+    }
+
+    public void setTemplatesList(List<Template> templatesList) {
+        this.templatesList = templatesList;
+    }
 }
