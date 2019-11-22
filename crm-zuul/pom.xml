@@ -11,8 +11,8 @@
     <groupId>ru.sberbank</groupId>
     <artifactId>crm</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>zuul-ws</name>
-    <description>Demo project for Spring Boot</description>
+    <name>crm-zuul</name>
+    <description>ZUUL Service</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -20,10 +20,6 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
