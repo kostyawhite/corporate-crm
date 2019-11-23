@@ -61,11 +61,10 @@ public class CommunicationService {
 
     public void sendTaskToDepartmentViaRouter(Task task, String recipientDepartmentName) {
         // TODO update path
-        /*
+
         String routerRequestUrl = String.format("%s/path/%d", routerRootUrl, recipientDepartmentName);
 
         restTemplate.postForObject(task, String.class);
-        */
 
         System.out.println(task.getTitle() + " отправлена " + recipientDepartmentName);
     }
