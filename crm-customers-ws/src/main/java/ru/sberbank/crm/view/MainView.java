@@ -20,14 +20,17 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.shared.communication.PushMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.sberbank.crm.entity.Department;
 import ru.sberbank.crm.entity.Task;
+import ru.sberbank.crm.entity.TaskState;
 import ru.sberbank.crm.entity.Template;
 import ru.sberbank.crm.service.CommunicationService;
 import ru.sberbank.crm.service.TaskService;
+import ru.sberbank.crm.service.TaskStateService;
 import ru.sberbank.crm.util.Broadcaster;
 
 import java.util.HashMap;
@@ -43,6 +46,7 @@ public class MainView extends VerticalLayout {
     private final Long selfDepartmentId = 2L;
 
     private TaskService taskService;
+    private TaskStateService taskStateService;
     private CommunicationService communicationService;
     private Registration broadcasterRegistration;
 
@@ -52,8 +56,12 @@ public class MainView extends VerticalLayout {
     private Task currentTask;
     private Button documentUpdateTextFieldButton = new Button("Обновить документ");
 
-    public MainView(@Autowired TaskService taskService, @Autowired CommunicationService communicationService) {
+    @Autowired
+    public MainView(TaskService taskService,
+                    TaskStateService taskStateService,
+                    CommunicationService communicationService) {
         this.taskService = taskService;
+        this.taskStateService = taskStateService;
         this.communicationService = communicationService;
 
         // Заголовок веб-сервиса
@@ -65,6 +73,7 @@ public class MainView extends VerticalLayout {
         Button addNewTask = new Button("Создать задачу");
         addNewTask.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         addNewTask.addClickListener(clickEvent -> addTasksDialog.open());
+        Anchor checkTasksStatus = new Anchor("task-status","Отслеживать задачи");
 
         // Блок с задачами
         H2 tasksHeading = new H2("Задачи");
@@ -117,13 +126,13 @@ public class MainView extends VerticalLayout {
         setAlignItems(Alignment.CENTER);
         setPadding(true);
         setHeightFull();
-        add(webServiceTitleHeading, addNewTask, splitLayout);
+        add(webServiceTitleHeading, addNewTask, checkTasksStatus, splitLayout);
     }
 
     private VerticalLayout getTaskLayout(Task task) {
         Binder<Department> taskDepartmentsBinder = new Binder<>();
         Map<String, String> departments = new HashMap<>();
-        for (Department department : communicationService.getDepartmentsFromRouter(selfDepartmentId)) {
+        for (Department department : communicationService.getDepartmentsFromRouter(selfDepartmentId, task.getTemplateId())) {
             departments.put(department.getDescription(), department.getName());
         }
 
@@ -244,8 +253,16 @@ public class MainView extends VerticalLayout {
                 newTask.setDescription(taskDescription.getValue());
                 newTask.setText("");
                 newTask.setTemplateId(templates.get(taskTemplatesDescription.getValue()));
-                taskService.saveTask(newTask);
 
+                TaskState taskState = new TaskState();
+                taskState.setGraphId(newTask.getTemplateId());
+                taskState.setPreviousDepartment("");
+                taskState.setCurrentDepartment(webServiceTitle);
+                taskState.setTitle(newTask.getTitle());
+                taskStateService.saveTask(taskState);
+                newTask.setId(taskState.getId());
+
+                taskService.saveTask(newTask);
                 Broadcaster.broadcast(taskService.getTaskById(newTask.getId()));
             } else {
                 taskBinder.validate();

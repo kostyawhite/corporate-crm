@@ -26,11 +26,6 @@ public class TaskService {
         return repository.findAll();
     }
 
-    public Task getTaskByTitle(String title) {
-        return repository
-                .findByTitle(title).orElseThrow(() -> new TaskNotFoundException("Задача не найдена"));
-    }
-
     public Task getTaskById(Long id) {
         return repository.findById(id)
                 .orElseThrow(() -> new TaskNotFoundException("Задача не найдена"));

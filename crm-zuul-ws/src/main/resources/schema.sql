@@ -1,0 +1,35 @@
+--CREATE TABLE departments(
+--   id             INTEGER NOT NULL PRIMARY KEY,
+--   name           VARCHAR(32) NOT NULL,
+--   description    VARCHAR(64) NOT NULL,
+--   is_available   BOOLEAN NOT NULL
+--);
+--
+--insert into departments values (1, 'crm-zuul-ws', 'Роутер', true);
+--insert into departments values (2, 'crm-customers-ws', 'Отдел клиентов', true);
+--insert into departments values (3, 'crm-analytics-ws', 'Отдел аналитиков', true);
+--insert into departments values (4, 'crm-developers-ws', 'Отдел разработчиков', true);
+--
+--
+--CREATE TABLE templates_description(
+--   id             INTEGER NOT NULL PRIMARY KEY,
+--   description    VARCHAR(64) NOT NULL
+--);
+--
+--insert into templates_description values (1, 'Шаблон: Клиент -> Аналитик <-> Разработчик -> Клиент');
+--insert into templates_description values (2, 'Шаблон: Клиент -> Разработчик -> Аналитик -> Клиент');
+--
+--
+--CREATE TABLE templates(
+--   id             INTEGER NOT NULL REFERENCES templates_description(id),
+--   department_id    INTEGER NOT NULL REFERENCES departments(id),
+--   next_department_id INTEGER NOT NULL REFERENCES departments(id)
+--);
+--
+--insert into templates values (1, 2, 3);
+--insert into templates values (1, 3, 4);
+--insert into templates values (1, 4, 2);
+--insert into templates values (1, 4, 3);
+--insert into templates values (2, 2, 4);
+--insert into templates values (2, 4, 3);
+--insert into templates values (2, 3, 2);

@@ -1,56 +1,64 @@
 package ru.sberbank.crm.service;
 
+import com.netflix.appinfo.InstanceInfo;
+import com.netflix.discovery.EurekaClient;
+import com.netflix.discovery.shared.Application;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.sberbank.crm.entity.Department;
 import ru.sberbank.crm.entity.Task;
+import ru.sberbank.crm.wrapper.DepartmentList;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
 public class CommunicationService {
-    // TODO update root
-    private final String routerRootUrl = "http:/routerIP:routerPort";
+
+    private final String routerEurekaName = "crm-zuul-ws";
+    private final String serviceTitle = "Отдел аналитиков";
 
     @Autowired
     private RestTemplate restTemplate;
 
-    public List<Department> getDepartmentsFromRouter(Long selfDepartmentId) {
-        // TODO update path
-        /*
-        String routerRequestUrl = String.format("%s/path/%d", routerRootUrl, selfDepartmentId);
+    @Autowired
+    private EurekaClient eurekaClient;
 
-        DepartmentList response = restTemplate.getForObject(
-                routerRequestUrl,
-                DepartmentList.class);
+    public List<Department> getDepartmentsFromRouter(Long selfDepartmentId, Long taskTemplateId) {
+
+        Application application = eurekaClient.getApplication(routerEurekaName);
+        InstanceInfo info = application.getInstances().get(0);
+
+        String url = String.format("http://%s:%d/departments?id=%s&templateId=%s",
+                info.getIPAddr(), info.getPort(), selfDepartmentId, taskTemplateId);
+        DepartmentList response = restTemplate.getForObject(url, DepartmentList.class);
 
         if (response != null) {
-            return response.getDepartmentList();
+            return response.getDepartmentsList();
         } else {
             return Collections.emptyList();
         }
-        */
-
-        List<Department> departments = new ArrayList<>();
-        Department department1 = new Department();
-        department1.setId(1L);
-        department1.setName("ws-department");
-        department1.setDescription("Отдел 1");
-        departments.add(department1);
-
-        return departments;
     }
 
     public void sendTaskToDepartmentViaRouter(Task task, String recipientDepartmentName) {
-        // TODO update path
-        /*
-        String routerRequestUrl = String.format("%s/path/%d", routerRootUrl, recipientDepartmentName);
 
-        restTemplate.postForObject(task, String.class);
-        */
+        Application application = eurekaClient.getApplication(routerEurekaName);
+        InstanceInfo info = application.getInstances().get(0);
 
-        System.out.println(task.getTitle() + " отправлена " + recipientDepartmentName);
+        String url = String.format("http://%s:%d/tasks?recipient=%s",
+                info.getIPAddr(), info.getPort(), recipientDepartmentName);
+
+        restTemplate.postForObject(url, task, String.class);
+    }
+
+    public void sendTaskStatusChange(Long id) {
+        Application application = eurekaClient.getApplication(routerEurekaName);
+        InstanceInfo info = application.getInstances().get(0);
+
+        String url = String.format("http://%s:%d/tasks-state?id=%d&current=%s",
+                info.getIPAddr(), info.getPort(), id, serviceTitle);
+
+        restTemplate.postForObject(url, "", String.class);
     }
 }

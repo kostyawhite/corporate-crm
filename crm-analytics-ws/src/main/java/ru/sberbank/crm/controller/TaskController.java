@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import ru.sberbank.crm.entity.Task;
+import ru.sberbank.crm.service.CommunicationService;
 import ru.sberbank.crm.service.TaskService;
 import ru.sberbank.crm.util.Broadcaster;
 
@@ -12,11 +13,16 @@ import ru.sberbank.crm.util.Broadcaster;
 public class TaskController {
 
     @Autowired
-    private TaskService service = new TaskService();
+    private TaskService taskService;
+
+    @Autowired
+    private CommunicationService communicationService;
 
     @PostMapping(value = "/send")
     public void addTask(@RequestBody Task task) {
-        service.saveTask(task);
-        Broadcaster.broadcast(service.getTaskById(task.getId()));
+        taskService.saveTask(task);
+        Broadcaster.broadcast(taskService.getTaskById(task.getId()));
+
+        communicationService.sendTaskStatusChange(task.getId());
     }
 }
