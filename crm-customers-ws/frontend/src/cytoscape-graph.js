@@ -7,15 +7,14 @@ class CytoscapeGraph extends PolymerElement {
     static get template() {
         return html`
             <style>
-                #cy {
-                  width: 300px;
-                  height: 300px;
-                  display: block;
-                }
+                        #cy {
+                          width: 1000px;
+                          height: 500px;
+                          display: block;
+                        }
             </style>
             <div id$="[[taskId]]" style="display: none;"></div>
-            <div id="cy">
-            </div>`
+            <div id="cy"></div>`
     }
 
     static get is() {return 'cytoscape-graph'}
@@ -37,7 +36,8 @@ class CytoscapeGraph extends PolymerElement {
                 'background-color': '#1676F3',
                 'label': 'data(id)',
                 'color': '#000',
-                'font-size': '18px'
+                'font-size': '18px',
+                'font-weight': 'normal'
               }
             },
 
@@ -51,7 +51,22 @@ class CytoscapeGraph extends PolymerElement {
                 'target-arrow-color': '#666',
                 'target-arrow-shape': 'triangle'
               }
-            }
+            },
+
+            {
+               selector: '.current',
+               style: {
+                 'background-color': '#5BFD48',
+                 'font-weight': 'bold',
+               }
+             },
+
+             {
+                selector: '.previous',
+                style: {
+                'background-color': '#F05026',
+               }
+             }
           ],
 
         });
@@ -68,11 +83,15 @@ class CytoscapeGraph extends PolymerElement {
 
     setCurrentElement(value) {
         let cy = cyMap.get(this.taskId);
-        cy.nodes('nodes').style('background-color', '#1676F3');
-        cy.nodes('nodes').style('font-weight', 'normal');
-        cy.nodes(value).style('background-color', '#F05026');
-        cy.nodes(value).style('font-weight', 'bold');
+        cy.nodes().removeClass('current');
+        cy.$(value).classes('current');
     }
+
+    setPreviousElement(value) {
+        let cy = cyMap.get(this.taskId);
+        cy.nodes().removeClass('previous');
+        cy.$(value).classes('previous');
+     }
 
     setData(nodes, edges) {
         var nodesArray = JSON.parse(nodes);
@@ -86,8 +105,7 @@ class CytoscapeGraph extends PolymerElement {
         }
 
         var layout = cy.layout({
-            name: 'grid',
-            rows: 2
+            name: 'circle'
         });
 
         layout.run();

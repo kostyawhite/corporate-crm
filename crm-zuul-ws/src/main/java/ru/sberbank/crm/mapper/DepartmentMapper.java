@@ -12,9 +12,9 @@ public class DepartmentMapper implements RowMapper<Department> {
     public Department mapRow(ResultSet resultSet, int i) throws SQLException {
         Department department = new Department();
 
-        department.setId(resultSet.getLong("next_department_id"));
-        department.setName(resultSet.getString("name"));
-        department.setDescription(resultSet.getString("description"));
+        department.setId(resultSet.getLong(1));
+        department.setName(resultSet.getString(2));
+        department.setDescription(resultSet.getString(3));
 
         return department;
     }

@@ -20,7 +20,6 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.shared.Registration;
 import com.vaadin.flow.shared.communication.PushMode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +30,10 @@ import ru.sberbank.crm.entity.Template;
 import ru.sberbank.crm.service.CommunicationService;
 import ru.sberbank.crm.service.TaskService;
 import ru.sberbank.crm.service.TaskStateService;
-import ru.sberbank.crm.util.Broadcaster;
+import ru.sberbank.crm.service.TemplateService;
+import ru.sberbank.crm.util.TaskBroadcaster;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 
@@ -48,6 +47,7 @@ public class MainView extends VerticalLayout {
     private TaskService taskService;
     private TaskStateService taskStateService;
     private CommunicationService communicationService;
+    private TemplateService templateService;
     private Registration broadcasterRegistration;
 
     private VerticalLayout tasksLayout = new VerticalLayout();
@@ -59,10 +59,12 @@ public class MainView extends VerticalLayout {
     @Autowired
     public MainView(TaskService taskService,
                     TaskStateService taskStateService,
-                    CommunicationService communicationService) {
+                    CommunicationService communicationService,
+                    TemplateService templateService) {
         this.taskService = taskService;
         this.taskStateService = taskStateService;
         this.communicationService = communicationService;
+        this.templateService = templateService;
 
         // Заголовок веб-сервиса
         H1 webServiceTitleHeading = new H1(webServiceTitle);
@@ -70,10 +72,15 @@ public class MainView extends VerticalLayout {
         // Добавление задач (только у клиентов)
         Dialog addTasksDialog = getTaskDialog();
 
+        HorizontalLayout routerLayout = new HorizontalLayout();
         Button addNewTask = new Button("Создать задачу");
         addNewTask.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         addNewTask.addClickListener(clickEvent -> addTasksDialog.open());
         Anchor checkTasksStatus = new Anchor("task-status","Отслеживать задачи");
+        Anchor createTemplate = new Anchor("create-template","Созать шаблон");
+        routerLayout.setDefaultVerticalComponentAlignment(
+                FlexComponent.Alignment.CENTER);
+        routerLayout.add(addNewTask, checkTasksStatus, createTemplate);
 
         // Блок с задачами
         H2 tasksHeading = new H2("Задачи");
@@ -126,7 +133,7 @@ public class MainView extends VerticalLayout {
         setAlignItems(Alignment.CENTER);
         setPadding(true);
         setHeightFull();
-        add(webServiceTitleHeading, addNewTask, checkTasksStatus, splitLayout);
+        add(webServiceTitleHeading, routerLayout, splitLayout);
     }
 
     private VerticalLayout getTaskLayout(Task task) {
@@ -174,12 +181,22 @@ public class MainView extends VerticalLayout {
         openTaskDocumentButton.addClickListener(clickEvent -> setDocumentFromTask(task));
         taskButtonsLayout.add(sendTaskButton, openTaskDocumentButton);
 
+        Button deleteTaskButton = new Button("Удалить задачу");
+        deleteTaskButton.addThemeVariants(ButtonVariant.LUMO_ERROR, ButtonVariant.LUMO_TERTIARY);
+        deleteTaskButton.addClickListener(clickEvent -> {
+            taskService.deleteTask(task.getId());
+            VerticalLayout verticalLayout = (VerticalLayout) taskLayout.getParent().get();
+            verticalLayout.remove(taskLayout);
+
+            taskStateService.deleteTask(task.getId());
+        });
+
         taskLayout.getStyle().set("background", "#FFFFFF");
         taskLayout.getStyle().set("border-radius", "20px");
         taskLayout.getStyle().set("padding", "30px 40px 40px 40px");
         taskLayout.getStyle().set("box-shadow", "0px 10px 10px rgba(229, 229, 229, 0.5)");
         taskLayout.setWidthFull();
-        taskLayout.add(taskTitle, taskDescription, taskDepartmentsSelect, taskButtonsLayout);
+        taskLayout.add(taskTitle, taskDescription, taskDepartmentsSelect, taskButtonsLayout, deleteTaskButton);
 
         return taskLayout;
     }
@@ -204,7 +221,7 @@ public class MainView extends VerticalLayout {
 
     private Dialog getTaskDialog() {
         Map<String, Long> templates = new HashMap<>();
-        for (Template template : communicationService.getTemplatesFromRouter()) {
+        for (Template template : templateService.getAllTemplates()) {
             templates.put(template.getDescription(), template.getId());
         }
 
@@ -255,7 +272,7 @@ public class MainView extends VerticalLayout {
                 newTask.setTemplateId(templates.get(taskTemplatesDescription.getValue()));
 
                 TaskState taskState = new TaskState();
-                taskState.setGraphId(newTask.getTemplateId());
+                taskState.setTemplateId(newTask.getTemplateId());
                 taskState.setPreviousDepartment("");
                 taskState.setCurrentDepartment(webServiceTitle);
                 taskState.setTitle(newTask.getTitle());
@@ -263,7 +280,7 @@ public class MainView extends VerticalLayout {
                 newTask.setId(taskState.getId());
 
                 taskService.saveTask(newTask);
-                Broadcaster.broadcast(taskService.getTaskById(newTask.getId()));
+                TaskBroadcaster.broadcast(taskService.getTaskById(newTask.getId()));
             } else {
                 taskBinder.validate();
                 templateBinder.validate();
@@ -286,7 +303,7 @@ public class MainView extends VerticalLayout {
     @Override
     protected void onAttach(AttachEvent attachEvent) {
         UI ui = attachEvent.getUI();
-        broadcasterRegistration = Broadcaster.register(newTask ->
+        broadcasterRegistration = TaskBroadcaster.register(newTask ->
                 ui.access(() -> {
                     tasksLayout.add(getTaskLayout(newTask));
                     ui.push();

@@ -9,7 +9,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.function.Consumer;
 
-public class Broadcaster {
+public class TaskBroadcaster {
     static Executor executor = Executors.newSingleThreadExecutor();
 
     static List<Consumer<Task>> listeners = new LinkedList<>();
@@ -19,7 +19,7 @@ public class Broadcaster {
         listeners.add(listener);
 
         return () -> {
-            synchronized (Broadcaster.class) {
+            synchronized (TaskBroadcaster.class) {
                 listeners.remove(listener);
             }
         };

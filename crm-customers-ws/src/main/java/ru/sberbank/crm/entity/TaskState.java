@@ -14,8 +14,8 @@ public class TaskState {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "graph_id")
-    private Long graphId;
+    @Column(name = "template_id")
+    private Long templateId;
 
     @Column(name = "title")
     private String title;
@@ -25,4 +25,9 @@ public class TaskState {
 
     @Column(name = "current_department")
     private String currentDepartment;
+
+    @Override
+    public String toString() {
+        return title;
+    }
 }

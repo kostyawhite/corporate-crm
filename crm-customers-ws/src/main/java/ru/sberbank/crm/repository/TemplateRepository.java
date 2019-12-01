@@ -6,5 +6,4 @@ import ru.sberbank.crm.entity.Template;
 
 @Repository
 public interface TemplateRepository extends JpaRepository<Template, Long> {
-
 }

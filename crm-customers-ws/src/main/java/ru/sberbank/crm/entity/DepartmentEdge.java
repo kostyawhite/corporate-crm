@@ -9,4 +9,3 @@ public class DepartmentEdge {
     private Long departmentId;
     private Long nextDepartmentId;
 }
-

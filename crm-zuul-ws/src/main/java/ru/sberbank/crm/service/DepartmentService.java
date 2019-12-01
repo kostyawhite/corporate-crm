@@ -11,9 +11,15 @@ public class DepartmentService {
     @Autowired
     private DepartmentRepository departmentRepository;
 
-    public DepartmentList getAvailableDepartments(Long id, Long templateId) {
+    public DepartmentList getAvailableDepartmentsByTemplate(Long id, Long templateId) {
         DepartmentList departments = new DepartmentList();
         departments.setDepartmentsList(departmentRepository.findAllAvailableByIdAndTemplateId(id, templateId));
+        return departments;
+    }
+
+    public DepartmentList getAvailableDepartments() {
+        DepartmentList departments = new DepartmentList();
+        departments.setDepartmentsList(departmentRepository.findAllAvailable());
         return departments;
     }
 }

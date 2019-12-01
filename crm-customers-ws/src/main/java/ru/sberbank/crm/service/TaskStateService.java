@@ -3,7 +3,9 @@ package ru.sberbank.crm.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.sberbank.crm.entity.TaskState;
+import ru.sberbank.crm.entity.Template;
 import ru.sberbank.crm.exception.TaskNotFoundException;
+import ru.sberbank.crm.exception.TemplateNotFound;
 import ru.sberbank.crm.repository.TaskStateRepository;
 
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.List;
 public class TaskStateService {
 
     @Autowired
-    TaskStateRepository repository;
+    private TaskStateRepository repository;
 
     public void saveTask(TaskState taskState) {
         repository.save(taskState);
@@ -27,6 +29,15 @@ public class TaskStateService {
 
         repository.save(taskState);
 
+    }
+
+    public void deleteTask(Long id) {
+        repository.deleteById(id);
+    }
+
+    public TaskState getTaskById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new TaskNotFoundException("Задача не найдена"));
     }
 
     public List<TaskState> getAllTasks() {
