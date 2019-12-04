@@ -86,15 +86,14 @@ public class CreateTemplateView extends VerticalLayout {
 
         H2 templateHeading = new H2("Выберите шаблон из списка для просмотра");
         VerticalLayout graphContainerLayout = new VerticalLayout();
-        graphContainerLayout.setHeight("500px");
-        graphContainerLayout.setWidth("1000px");
+        graphContainerLayout.setHeight("400px");
+        graphContainerLayout.setWidth("900px");
         graphTemplateLayout.getStyle().set("background", "#FFFFFF");
         graphTemplateLayout.getStyle().set("border-radius", "20px");
         graphTemplateLayout.getStyle().set("padding", "30px 40px 40px 40px");
         graphTemplateLayout.getStyle().set("box-shadow", "0px 10px 10px rgba(229, 229, 229, 0.5)");
         graphTemplateLayout.setPadding(true);
         graphTemplateLayout.setWidth("85%");
-        graphTemplateLayout.setHeightFull();
         graphTemplateLayout.setHorizontalComponentAlignment(FlexComponent.Alignment.CENTER, graphContainerLayout);
         graphTemplateLayout.add(templateHeading, graphContainerLayout);
 

@@ -187,6 +187,18 @@ class CytoscapeEdgeHandlesGraph extends PolymerElement {
         return '{"nodes":[' + Array.from(cySet).join() + ']}';
      }
 
+     validateGraph() {
+        let cy = cyMap.get(this.templateId);
+                let array = []
+                let els = cy.edges().jsons();
+
+                let cySet = new Set();
+                for (var i = 0; i < els.length; ++i) {
+                    cySet.add('{"id":"' + els[i].data.source + '"}');
+                    cySet.add('{"id":"' + els[i].data.target + '"}');
+                }
+     }
+
     resetGraph() {
         cyMap.delete(this.templateId);
     }

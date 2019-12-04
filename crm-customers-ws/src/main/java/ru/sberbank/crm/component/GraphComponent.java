@@ -21,13 +21,17 @@ public class GraphComponent extends PolymerTemplate<GraphModel> {
     }
 
     public void setCurrentElement(String value){
-        this.getElement().executeJs("this.setCurrentElement($0)",
-                String.format("[id = '%s']", value));
+        if (!value.isEmpty()) {
+            this.getElement().executeJs("this.setCurrentElement($0)",
+                    String.format("[id = '%s']", value));
+        }
     }
 
     public void setPreviousElement(String value){
-        this.getElement().executeJs("this.setPreviousElement($0)",
-                String.format("[id = '%s']", value));
+        if (!value.isEmpty()) {
+            this.getElement().executeJs("this.setPreviousElement($0)",
+                    String.format("[id = '%s']", value));
+        }
     }
 
     public void setData(String nodes, String edges) {

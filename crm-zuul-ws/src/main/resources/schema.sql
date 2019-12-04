@@ -9,6 +9,8 @@
 --insert into departments values (2, 'crm-customers-ws', 'Отдел клиентов', true);
 --insert into departments values (3, 'crm-analytics-ws', 'Отдел аналитиков', true);
 --insert into departments values (4, 'crm-developers-ws', 'Отдел разработчиков', true);
+--insert into departments values (5, 'crm-testers-ws', 'Отдел тестировщиков', true);
+--insert into departments values (6, 'crm-security-ws', 'Отдел безопасности', true);
 --
 --
 --

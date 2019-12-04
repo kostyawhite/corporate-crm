@@ -7,11 +7,12 @@ class CytoscapeGraph extends PolymerElement {
     static get template() {
         return html`
             <style>
-                        #cy {
-                          width: 1000px;
-                          height: 500px;
-                          display: block;
-                        }
+                #cy {
+                    width: 900px;
+                    height: 400px;
+                    display: block;
+                    border: 1px dotted #c8c8c8;
+                }
             </style>
             <div id$="[[taskId]]" style="display: none;"></div>
             <div id="cy"></div>`
@@ -56,7 +57,7 @@ class CytoscapeGraph extends PolymerElement {
             {
                selector: '.current',
                style: {
-                 'background-color': '#5BFD48',
+                 'background-color': '#50c878',
                  'font-weight': 'bold',
                }
              },
@@ -64,7 +65,7 @@ class CytoscapeGraph extends PolymerElement {
              {
                 selector: '.previous',
                 style: {
-                'background-color': '#F05026',
+                'background-color': '#ff6f61',
                }
              }
           ],
@@ -113,3 +114,5 @@ class CytoscapeGraph extends PolymerElement {
 }
 
 customElements.define(CytoscapeGraph.is, CytoscapeGraph);
+
+
